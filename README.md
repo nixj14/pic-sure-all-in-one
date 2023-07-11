@@ -34,12 +34,12 @@ ________________________________________________________________________________
 - List of git branches modified or used for feature/redhat branch (Don't clone)
 	- Pic-sure-all-in-one feature/redhat core branch: 
 		- https://github.com/hms-dbmi/pic-sure-all-in-one (feature/redhat)
-	- Pic-sure-hpds-ui  feature/redhat httpd base image base repo
-		- https://github.com/hms-dbmi/pic-sure-hpds-ui.git (feature/redhat)
-	- Pic-sure-hpds-ui feature/redhat hpds image git repo
+	- PIC-SURE-core-frontend  feature/redhat httpd base image base repo
+		- https://github.com/hms-dbmi/pic-sure-core-frontend.git (feature/redhat)
+	- PIC-SURE-hpds feature/redhat hpds image git repo
 		- https://github.com/hms-dbmi/pic-sure-hpds.git (feature/redhat)
-	- Pic-sure baseline release control  which will have git hashes specific to feature/redhat branches
-		- https://github.com/hms-dbmi/baseline-pic-sure-release-control (feature/redhat)
+	- PIC-SURE baseline release control  which will have git hashes specific to feature/redhat branches
+		- https://github.com/hms-dbmi/pic-sure-baseline-frontend (feature/redhat)
 
 **Preparing to deploy:**
 
@@ -91,8 +91,8 @@ ________________________________________________________________________________
 	  2. AUTH0_CLIENT_SECRET: This is the client_secret of your auth0 application
 	  3  AUTH0_TENANT: This is the first part of your auth0 domain, for example if your domain is avillachlab.auth0.com you would enter avillachlab in this field
 	  4. EMAIL: This is the google account that will be the initial admin user.
-	  5. PROJECT_SPECIFIC_OVERRIDE_REPOSITORY: This is the repo that contains the project specific overrides for your project. If you just want the default PIC-SURE behavior use this repo : <https://github.com/hms-dbmi/baseline-pic-sure>
-	  6. RELEASE_CONTROL_REPOSITORY: This is the repo that contains the build-spec.json file for your project. This file controls what code is built and deployed. If you just want the default PIC-SURE behavior use this repo : <https://github.com/hms-dbmi/baseline-pic-sure-release-control>
+	  5. PROJECT_SPECIFIC_OVERRIDE_REPOSITORY: This is the repo that contains the project specific overrides for your project. If you just want the default PIC-SURE behavior use this repo : <https://github.com/hms-dbmi/pic-sure-baseline-frontend>
+	  6. RELEASE_CONTROL_REPOSITORY: This is the repo that contains the build-spec.json file for your project. This file controls what code is built and deployed. If you just want the default PIC-SURE behavior use this repo : <https://github.com/hms-dbmi/pic-sure-baseline-release-control>
 	  7. Click the "Build" button.
 	  8. Wait until all jobs complete. This may take several minutes. When nothing displays in the "Build Queue" or "Build Executor Status" to the left of the page, all jobs will have completed.
 	  

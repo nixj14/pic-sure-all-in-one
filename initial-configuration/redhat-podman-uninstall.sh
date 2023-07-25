@@ -51,6 +51,7 @@ rm -rf /var/log/wildfly-docker-os-logs
 rm -rf /var/log/mysqld.log
 rm -rf mysql57-community-release-el7-9.noarch.rpm*
 yum remove -y maven
+yum remove tzdata-java -y
 rm -rf ~/.m2
 
 systemctl stop jenkins

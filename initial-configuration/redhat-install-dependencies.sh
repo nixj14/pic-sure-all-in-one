@@ -11,6 +11,7 @@ yum -y update
 echo "Update yum to get correct version of MariaDB"
 curl -sS https://downloads.mariadb.com/MariaDB/mariadb_repo_setup | sudo bash -s -- --mariadb-server-version="mariadb-10.11.4"
 
+yum -y install maven
 yum install tzdata-java -y
 yum -y install dnf-utils wget openssl java-11-openjdk-devel net-tools zip
 rpm --import https://repo.mysql.com/RPM-GPG-KEY-mysql-2022
@@ -27,11 +28,6 @@ yum clean -y  packages
 yum install firewalld -y
 systemctl enable --now firewalld
 systemctl start firewalld
-
-##Instaling Maven
-
-echo "installaing maven"
-yum -y install maven
 
 ## Emulating Docker CLI using podman.
 

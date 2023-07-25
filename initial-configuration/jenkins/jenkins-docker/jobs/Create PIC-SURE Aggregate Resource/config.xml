@@ -86,6 +86,7 @@ cat &gt; $PROP_FILE &lt;&lt;-END
 target.picsure.url=$TARGET_PICSURE_URL
 target.picsure.token=
 target.picsure.obfuscation_threshold=$TARGET_OBFUSCATION_THRESHOLD
+visualization.resource.id=$TARGET_VISUALIZATION_RESOURCE
 END
 
 RESOURCE_ID=`uuidgen -r`

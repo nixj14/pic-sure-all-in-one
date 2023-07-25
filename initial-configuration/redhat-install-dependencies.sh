@@ -20,7 +20,6 @@ rpm -ivh mysql57-community-release-el7-9.noarch.rpm
 yum-config-manager --disable mysql80-community
 yum-config-manager --enable mysql57-community
 yum module disable -y mysql;
-yum remove -y  java-1.8*
 yum clean -y  packages
 
 ## Installing and starting Firewalld service 

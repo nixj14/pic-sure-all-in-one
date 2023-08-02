@@ -1,3 +1,6 @@
+ARG proxyOpts
+ENV PROXY_OPTS $proxyOpts
+
 FROM jenkins/jenkins:2.377
 
 COPY plugins.txt /usr/share/jenkins/ref/plugins.txt
@@ -32,4 +35,4 @@ RUN apt-get install jq -y
 
 RUN apt-get -y install uuid-runtime
 
-RUN jenkins-plugin-cli --plugin-file /usr/share/jenkins/ref/plugins.txt
+RUN java $PROXY_OPTS -jar /opt/jenkins-plugin-manager.jar -f /usr/share/jenkins/ref/plugins.txt

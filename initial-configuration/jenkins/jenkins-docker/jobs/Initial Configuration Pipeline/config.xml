@@ -62,6 +62,12 @@
           <defaultValue>__YOUR_EMAIL_PASSWORD__</defaultValue>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>HELP_MENU_EMAIL</name>
+          <description>The email address that will be shown to users in the help dropdown and on the error pages.</description>
+          <defaultValue>nobody@exmaple.com</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
   </properties>
@@ -74,12 +80,13 @@ def build_hashes = {};
 pipeline {
     agent any 
     stages {
-        stage(&apos;Set Project Specific Repositories&apos;) {
+        stage(&apos;Set Project Specific Repositories and Help Email&apos;) {
             steps {
                 script {
                     sh &quot;&quot;&quot;
                         sed -i &quot;s|__PROJECT_SPECIFIC_OVERRIDE_REPO__|$env.PROJECT_SPECIFIC_OVERRIDE_REPOSITORY|g&quot; /var/jenkins_home/config.xml
                         sed -i &quot;s|__RELEASE_CONTROL_REPO__|$env.RELEASE_CONTROL_REPOSITORY|g&quot; /var/jenkins_home/config.xml
+                        sed -i &quot;s|__HELP_MENU_EMAIL__|$env.HELP_MENU_EMAIL|g&quot; /var/jenkins_home/config.xml
                     &quot;&quot;&quot;
                     Jenkins.instance.doReload()
                 }

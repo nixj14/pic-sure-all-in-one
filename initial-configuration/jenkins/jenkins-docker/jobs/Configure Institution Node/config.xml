@@ -63,6 +63,12 @@
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
          <hudson.model.StringParameterDefinition>
+          <name>HELP_MENU_EMAIL</name>
+          <description>The email address that will be shown to users in the help dropdown and on the error pages.</description>
+          <defaultValue>nobody@exmaple.com</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+         <hudson.model.StringParameterDefinition>
           <name>TARGET_OBFUSCATION_THRESHOLD</name>
           <description>The aggregate resource will be configured to obfuscate result counts lower than this threshold</description>
           <defaultValue>10</defaultValue>
@@ -89,12 +95,13 @@ def psu_ref = &apos;&apos;
 pipeline {
     agent any 
     stages {
-        stage(&apos;Set Project Specific Repositories&apos;) {
+        stage(&apos;Set Project Specific Repositories and Help Email&apos;) {
             steps {
                 script {
                     sh &quot;&quot;&quot;
                         sed -i &quot;s|__PROJECT_SPECIFIC_OVERRIDE_REPO__|$env.PROJECT_SPECIFIC_OVERRIDE_REPOSITORY|g&quot; /var/jenkins_home/config.xml
                         sed -i &quot;s|__RELEASE_CONTROL_REPO__|$env.RELEASE_CONTROL_REPOSITORY|g&quot; /var/jenkins_home/config.xml
+                        sed -i &quot;s|__HELP_MENU_EMAIL__|$env.HELP_MENU_EMAIL|g&quot; /var/jenkins_home/config.xml
                     &quot;&quot;&quot;
                     Jenkins.instance.doReload()
                 }

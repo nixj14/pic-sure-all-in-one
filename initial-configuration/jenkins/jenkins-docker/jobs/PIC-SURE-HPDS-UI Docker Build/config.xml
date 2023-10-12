@@ -58,6 +58,9 @@ if [ -f &quot;/usr/local/docker-config/setProxy.sh&quot; ]; then
    . /usr/local/docker-config/setProxy.sh
 fi
 
+export old_help_email_link=`cat /usr/local/docker-config/httpd/picsureui_settings.json | grep helpLink | cut -d &apos;:&apos; -f 2 | sed &apos;s/\&quot;,*//g&apos;`
+sed -i &quot;s/$old_help_email_link/mailto:${env.PRODUCTION_MAILS}/g&quot; /usr/local/docker-config/httpd/picsureui_settings.json
+
 GIT_BRANCH_SHORT=`echo ${GIT_BRANCH} | cut -d &quot;/&quot; -f 2` 
 GIT_COMMIT_SHORT=`echo ${GIT_COMMIT} | cut -c1-7`
 

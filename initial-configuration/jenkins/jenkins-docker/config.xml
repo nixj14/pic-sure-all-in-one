@@ -176,6 +176,8 @@
           <string>*/master</string>
           <string>release_control_repo</string>
           <string>__RELEASE_CONTROL_REPO__</string>
+          <string>help_menu_email</string>
+          <string>__HELP_MENU_EMAIL__</string>
         </tree-map>
       </envVars>
     </hudson.slaves.EnvironmentVariablesNodeProperty>

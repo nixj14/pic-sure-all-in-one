@@ -2,4 +2,5 @@
 .project
 *.iml
 initial-configuration/mysql-docker/.env
+opts.sh
 

@@ -5,6 +5,7 @@ CWD=`pwd`
 
 mkdir -p /usr/local/docker-config
 cp -r config/* /usr/local/docker-config/
+cp default_opts.sh ../opts.sh
 
 echo "Starting update"
 yum -y update 

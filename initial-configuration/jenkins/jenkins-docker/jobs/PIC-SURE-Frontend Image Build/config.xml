@@ -55,7 +55,7 @@ GIT_BRANCH_SHORT=`echo ${GIT_BRANCH} | cut -d &quot;/&quot; -f 2`
 GIT_COMMIT_SHORT=`echo ${GIT_COMMIT} | cut -c1-7`
 
 cp -r /usr/local/docker-config/httpd/cert ./cert/
-cp /usr/local/docker-config/httpd/new_ui_vhost.conf httpd-vhosts.conf
+cp /usr/local/docker-config/httpd/httpd-vhosts.conf httpd-vhosts.conf
 #todo: add proxy back
 docker build -f Dockerfile -t hms-dbmi/pic-sure-frontend:${GIT_BRANCH_SHORT}_${GIT_COMMIT_SHORT} .
 docker tag hms-dbmi/pic-sure-frontend:${GIT_BRANCH_SHORT}_${GIT_COMMIT_SHORT} hms-dbmi/pic-sure-frontend:LATEST</command>

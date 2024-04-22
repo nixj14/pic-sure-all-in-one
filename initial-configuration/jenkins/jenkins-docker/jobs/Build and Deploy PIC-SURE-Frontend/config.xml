@@ -4,19 +4,10 @@
   <description></description>
   <keepDependencies>false</keepDependencies>
   <properties>
-    <com.coravy.hudson.plugins.github.GithubProjectProperty plugin="github@1.38.0">
-      <projectUrl>https://github.com/hms-dbmi/PIC-SURE-Frontend.git/</projectUrl>
-      <displayName></displayName>
-    </com.coravy.hudson.plugins.github.GithubProjectProperty>
     <hudson.model.ParametersDefinitionProperty>
       <parameterDefinitions>
         <hudson.model.StringParameterDefinition>
-          <name>pipeline_build_id</name>
-          <defaultValue>MANUAL_RUN</defaultValue>
-          <trim>true</trim>
-        </hudson.model.StringParameterDefinition>
-        <hudson.model.StringParameterDefinition>
-          <name>git_hash</name>
+          <name>branch</name>
           <defaultValue>*/dev</defaultValue>
           <trim>true</trim>
         </hudson.model.StringParameterDefinition>
@@ -32,7 +23,7 @@
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
-        <name>${git_hash}</name>
+        <name>${branch}</name>
       </hudson.plugins.git.BranchSpec>
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
@@ -54,21 +45,31 @@ fi
 GIT_BRANCH_SHORT=`echo ${GIT_BRANCH} | cut -d &quot;/&quot; -f 2` 
 GIT_COMMIT_SHORT=`echo ${GIT_COMMIT} | cut -c1-7`
 
-cp -r /usr/local/docker-config/httpd/cert ./cert/
-cp /usr/local/docker-config/httpd/new_ui_vhost.conf httpd-vhosts.conf
-#todo: add proxy back
+cp /usr/local/docker-config/httpd/httpd-vhosts.conf .
+cp -r /usr/local/docker-config/httpd/cert .
+
+#docker build --build-arg http_proxy=$http_proxy --build-arg https_proxy=$http_proxy --build-arg no_proxy=&quot;$no_proxy&quot; \
+#--build-arg HTTP_PROXY=$http_proxy --build-arg HTTPS_PROXY=$http_proxy --build-arg NO_PROXY=&quot;$no_proxy&quot; \
+#-t hms-dbmi/pic-sure-hpds-ui:${GIT_BRANCH_SHORT}_${GIT_COMMIT_SHORT} .
+#docker tag hms-dbmi/pic-sure-hpds-ui:${GIT_BRANCH_SHORT}_${GIT_COMMIT_SHORT} hms-dbmi/pic-sure-hpds-ui:LATEST
+
+#TODO: Add back proxy
+
 docker build -f Dockerfile -t hms-dbmi/pic-sure-frontend:${GIT_BRANCH_SHORT}_${GIT_COMMIT_SHORT} .
-docker tag hms-dbmi/pic-sure-frontend:${GIT_BRANCH_SHORT}_${GIT_COMMIT_SHORT} hms-dbmi/pic-sure-frontend:LATEST</command>
+docker tag hms-dbmi/pic-sure-frontend:${GIT_BRANCH_SHORT}_${GIT_COMMIT_SHORT} hms-dbmi/pic-sure-frontend:LATEST
+
+docker stop httpd &amp;&amp; docker rm httpd
+docker run --name=httpd --restart always --network=picsure \
+  -v /var/log/httpd-docker-logs/:/usr/local/apache2/logs/ \
+  -v $DOCKER_CONFIG_DIR/httpd/cert:/usr/local/apache2/cert/ \
+  -p 80:80 \
+  -p 443:443 \
+  -d hms-dbmi/pic-sure-frontend:LATEST
+#docker exec httpd sed -i &apos;/^#LoadModule proxy_wstunnel_module/s/^#//&apos; conf/httpd.conf
+#docker restart httpd</command>
       <configuredLocalRules/>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>
-  <buildWrappers>
-    <hudson.plugins.ws__cleanup.PreBuildCleanup plugin="ws-cleanup@0.45">
-      <deleteDirs>false</deleteDirs>
-      <cleanupParameter></cleanupParameter>
-      <externalDelete></externalDelete>
-      <disableDeferredWipeout>false</disableDeferredWipeout>
-    </hudson.plugins.ws__cleanup.PreBuildCleanup>
-  </buildWrappers>
+  <buildWrappers/>
 </project>

@@ -58,7 +58,7 @@ docker run --name=httpd --restart always --network=picsure \
   $CUSTOM_HTTPD_VOLUMES \
   -p 80:80 \
   -p 443:443 \
-  -d hms-dbmi/PIC-SURE-Frontend:LATEST
+  -d hms-dbmi/pic-sure-frontend:LATEST
 docker network connect selenium httpd
 docker exec httpd sed -i '/^#LoadModule proxy_wstunnel_module/s/^#//' conf/httpd.conf
 docker restart httpd

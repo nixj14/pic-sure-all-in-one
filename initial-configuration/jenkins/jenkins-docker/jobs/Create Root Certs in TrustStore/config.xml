@@ -18,8 +18,10 @@
         curl https://letsencrypt.org/certs/lets-encrypt-r3.der -o lets-encrypt-r3.der
 
         <!-- Delete existing certs in case we've run this job before -->
-        keytool -delete -keystore /usr/local/docker-config/wildfly/application.truststore -storepass password -noprompt -trustcacerts -alias letsencryptauthority1
-        keytool -delete -keystore /usr/local/docker-config/wildfly/application.truststore -storepass password -noprompt -trustcacerts -alias letsencryptauthority2
+        if [ -f /usr/local/docker-config/wildfly/application.truststore ] &amp;&amp; [ ! -z "$(keytool -list -keystore /usr/local/docker-config/wildfly/application.truststore -storepass password -noprompt -trustcacerts -alias letsencryptauthority1)" ]; then
+          keytool -delete -keystore /usr/local/docker-config/wildfly/application.truststore -storepass password -noprompt -trustcacerts -alias letsencryptauthority1
+          keytool -delete -keystore /usr/local/docker-config/wildfly/application.truststore -storepass password -noprompt -trustcacerts -alias letsencryptauthority2
+        fi
 
         <!--Import Certs to trust store-->
         keytool -import -keystore /usr/local/docker-config/wildfly/application.truststore -storepass password -noprompt -trustcacerts -alias letsencryptauthority1 -file isrgrootx1.der -storetype JKS

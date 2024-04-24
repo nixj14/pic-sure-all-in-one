@@ -60,7 +60,7 @@ docker run --name=httpd --restart always --network=picsure \
   -p 443:443 \
   -d hms-dbmi/pic-sure-frontend:LATEST
 docker network connect selenium httpd
-docker exec httpd sed -i '/^#LoadModule proxy_wstunnel_module/s/^#//' conf/httpd.conf
+docker exec httpd sh -c 'sed -i "/^#LoadModule proxy_wstunnel_module/s/^#//" $HTTPD_PREFIX/conf/httpd.conf'
 docker restart httpd
 
 docker stop wildfly && docker rm wildfly

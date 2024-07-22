@@ -1,5 +1,8 @@
 #!/bin/bash
 ./stop-jenkins.sh
+
+echo "DOCKER_CONFIG_DIR=$DOCKER_CONFIG_DIR"
+
 git pull
 
 echo "Sometimes we have to update not just the Jenkins jobs, but also the docker image itself."

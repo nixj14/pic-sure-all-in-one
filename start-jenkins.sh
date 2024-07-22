@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 DOCKER_CONFIG_DIR="${DOCKER_CONFIG_DIR:-/usr/local/docker-config}"
+echo "DOCKER_CONFIG_DIR=$DOCKER_CONFIG_DIR"
 
 if [ -f $DOCKER_CONFIG_DIR/setProxy.sh ]; then
    . $DOCKER_CONFIG_DIR/setProxy.sh

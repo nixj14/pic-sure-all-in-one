@@ -193,7 +193,7 @@
           <default>
             <comparator class="hudson.util.CaseInsensitiveComparator" reference="../../../../../../views/listView/jobNames/comparator"/>
           </default>
-          <int>6</int>
+          <int>7</int>
           <string>project_specific_override_repo</string>
           <string>__PROJECT_SPECIFIC_OVERRIDE_REPO__</string>
           <string>release_control_branch</string>
@@ -206,6 +206,8 @@
           <string>/usr/local/docker-config/</string>
           <string>MYSQL_NETWORK</string>
           <string>host</string>
+          <string>MIGRATION_NAME</string>
+          <string>__PROJECT_SPECIFIC_MIGRATION_NAME__</string>
         </tree-map>
       </envVars>
     </hudson.slaves.EnvironmentVariablesNodeProperty>

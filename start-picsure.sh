@@ -12,15 +12,12 @@ if [ -f "$DOCKER_CONFIG_DIR/setProxy.sh" ]; then
    . $DOCKER_CONFIG_DIR/setProxy.sh
 fi
 
-if ! docker network inspect selenium > /dev/null 2>&1; then
-  docker network create selenium
-fi
-
-
-if [ -z "$(grep queryExportType $DOCKER_CONFIG_DIR/httpd/picsureui_settings.json | grep DISABLED)" ]; then
-	export EXPORT_SIZE="2000";
-else
-	export EXPORT_SIZE="0";
+if [ ! -f $DOCKER_CONFIG_DIR/httpd/.env ]; then
+  if [ -z "$(grep queryExportType $DOCKER_CONFIG_DIR/httpd/picsureui_settings.json | grep DISABLED)" ]; then
+    export EXPORT_SIZE="2000";
+  else
+    export EXPORT_SIZE="0";
+  fi
 fi
 
 export PSAMA_OPTS="-Xms2g -Xmx4g -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=256m -Djava.net.preferIPv4Stack=true $PROXY_OPTS"
@@ -58,18 +55,30 @@ if [ -f $DOCKER_CONFIG_DIR/httpd/custom_httpd_volumes ]; then
 fi
 
 docker stop httpd && docker rm httpd
-docker run --name=httpd --restart always --network=picsure \
-  -v /var/log/httpd-docker-logs/:/usr/local/apache2/logs/ \
-  $PICSURE_SETTINGS_VOLUME \
-  $PICSURE_BANNER_VOLUME \
-  $PSAMA_SETTINGS_VOLUME \
-  -v $DOCKER_CONFIG_DIR/httpd/cert:/usr/local/apache2/cert/ \
-  $CUSTOM_HTTPD_VOLUMES \
-  -p 80:80 \
-  -p 443:443 \
-  -d hms-dbmi/pic-sure-ui-overrides:LATEST
-docker network connect selenium httpd
-docker exec httpd sed -i '/^#LoadModule proxy_wstunnel_module/s/^#//' conf/httpd.conf
+
+
+if [ ! -f $DOCKER_CONFIG_DIR/httpd/.env ]; then
+  docker run --name=httpd --restart always --network=picsure \
+    -v /var/log/httpd-docker-logs/:/app/logs/ \
+    -v $DOCKER_CONFIG_DIR/httpd/.env:/app/.env \
+    -v $DOCKER_CONFIG_DIR/httpd/cert:/usr/local/apache2/cert/ \
+    $CUSTOM_HTTPD_VOLUMES \
+    -p 80:80 \
+    -p 443:443 \
+    -d hms-dbmi/pic-sure-frontend:LATEST
+else
+  docker run --name=httpd --restart always --network=picsure \
+    -v /var/log/httpd-docker-logs/:/usr/local/apache2/logs/ \
+    $PICSURE_SETTINGS_VOLUME \
+    $PICSURE_BANNER_VOLUME \
+    $PSAMA_SETTINGS_VOLUME \
+    -v $DOCKER_CONFIG_DIR/httpd/cert:/usr/local/apache2/cert/ \
+    $CUSTOM_HTTPD_VOLUMES \
+    -p 80:80 \
+    -p 443:443 \
+    -d hms-dbmi/pic-sure-ui-overrides:LATEST
+fi
+docker exec httpd sed -i '/^#LoadModule proxy_wstunnel_module/s/^#//' /usr/local/apache2/conf/httpd.conf
 docker restart httpd
 
 docker stop psama && docker rm psama
@@ -97,6 +106,6 @@ docker run --name=wildfly --restart always --network=picsure -u root \
   -e JAVA_OPTS="$WILDFLY_JAVA_OPTS $TRUSTSTORE_JAVA_OPTS" \
   -d hms-dbmi/pic-sure-wildfly:LATEST
 
-if test -d $DOCKER_CONFIG_DIR/dictionary then
+if [ -d $DOCKER_CONFIG_DIR/dictionary]; then
   docker compose -f $DOCKER_CONFIG_DIR/dictionary/docker-compose.yml --env-file $DOCKER_CONFIG_DIR/dictionary/.env up -d
 fi
